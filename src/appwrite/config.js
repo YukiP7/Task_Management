@@ -1,5 +1,5 @@
 import conf from "../conf/conf.js"
-import {Client , ID , Databases  , Query} from "appwrite"
+import {Client , Databases  , Query} from "appwrite"
 
 export class Service {
     client = new Client() ;
@@ -17,7 +17,6 @@ export class Service {
             return await this.databases.createDocument(
                 conf.appwriteDatabaseId ,
                 conf.appwriteCollectionId ,
-                ID.unique() ,
                 slug ,
                 {
                    title ,
@@ -33,23 +32,23 @@ export class Service {
         }
     }
 
-    async getTasks(){
+    async getTasks(queries = [Query.equal("status", "active")]){
         try {
             return await this.databases.listDocuments(
                 conf.appwriteDatabaseId ,
                 conf.appwriteCollectionId ,
+                queries
             )
         } catch (error) {
             console.log("Appwrite service :: getTasks :: error" , error);
         }
     }
 
-    async updateTask(ID , slug , {title , description , startFrom , endAt , typeOf_task , task_status}){
+    async updateTask( slug , {title , description , startFrom , endAt , typeOf_task , task_status}){
         try {
             return await this.databases.updateDocument(
                 conf.appwriteDatabaseId ,
                 conf.appwriteCollectionId ,
-                ID,
                 slug ,
                 {
                     title ,
@@ -65,12 +64,12 @@ export class Service {
         }
     }
 
-    async deleteTask(ID){
+    async deleteTask(slug){
         try {
             return await this.databases.deleteDocument(
                 conf.appwriteDatabaseId ,
                 conf.appwriteCollectionId ,
-                ID
+                slug
             )
             return true 
         } catch (error) {

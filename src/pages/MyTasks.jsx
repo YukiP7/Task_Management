@@ -18,7 +18,7 @@ function MyTasks() {
             <div className="flex flex-wrap ">
                 {tasks.map((task) => (
                     <div key={task.ID} className='p-2 w-1/4'>
-                        <Card task={task} />
+                        <Card {...task} />
                     </div>
                 ))}
             </div>
